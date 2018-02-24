@@ -1,0 +1,113 @@
+<?php
+
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Añadir Canción</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script type="text/javascript">
+
+		function addSong(){
+
+			var titleSong = document.getElementById('title').value;
+			var artistSong = document.getElementById('artist').value;
+			var urlSong = document.getElementById('url').value;
+
+			var token = sessionStorage.getItem('token');
+			/*// Consola
+			console.log(titleSong);
+			console.log(artistSong);
+			console.log(urlSong);
+			// Instanciar el objeto XMLHttpRequest
+			connection = new XMLHttpRequest();
+			// Preparar respuesta
+			connection.onreadystatechange = response;
+			// Petición HTTP con POST
+			connection.open('POST', 'http://localhost/appmusicAdrian/public/index.php/songs/addSongs.json');
+			// Cabecera de la petición
+			connection.setRequestHeader('Authorization' , token);
+			// Envío
+			connection.send('title=' + titleSong, 'artist=' + artistSong, 'url=' + urlSong);*/
+
+			$.ajax({
+				   // la URL para la petición
+				   url: "http://localhost/appmusicAdrian/public/index.php/songs/addSongs.json",
+				   // especifica si será una petición POST o GET
+				   type: 'POST',
+				   // la información a enviar
+				   data: { 
+				   		'title' : titleSong,
+				   	 	'artist' : artistSong,
+				   	  	'url' : urlSong 
+				   	},
+				   
+				   // Cabecera
+				   headers: { 'Authorization': token },
+				  
+				   success:function(response) {
+				        if (response.code == 200) 
+				        {
+						document.getElementById('code').innerHTML = response.code;
+						document.getElementById('message').innerHTML = response.message;
+						}
+						else
+						{
+							document.getElementById('code').innerHTML = response.code;
+							document.getElementById('message').innerHTML = response.message;
+						}
+				    },
+				});
+			}
+		
+		function response()
+		{
+			if (connection.readyState == 4) 
+			{
+				var response = JSON.parse(connection.responseText);
+				console.log(response);
+				if (response.code == 200) {
+					document.getElementById('code').innerHTML = response.code;
+					document.getElementById('message').innerHTML = response.message;
+				}
+				else
+				{
+					document.getElementById('code').innerHTML = response.code;
+					document.getElementById('message').innerHTML = response.message;
+				}
+			}
+		}
+	</script>
+</head>
+<body>
+
+	<h1>Añadir canciones</h1>
+
+	<h2>Aquí puedes añadir nuevas canciones</h2>
+
+	<a href="javascript:location.reload()">Actualizar</a>
+	<hr>
+
+	<div>
+		<label>Título</label>
+		<input type="text" id="title">
+		<br>
+		<label>Artista</label>
+		<input type="text" id="artist">
+		<br>
+		<label>URL</label>
+		<input type="text" id="url">
+		<hr>
+		<button onclick='addSong()'>Añadir canción</button>
+	</div>
+
+	<div id='response'>
+			<p id='code'></p>
+			<p id='message'></p>
+			<p id='data'></p>
+	</div>
+
+</body>
+</html>
