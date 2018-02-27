@@ -1,0 +1,68 @@
+<?php
+
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Lista de canciones</title>
+	<script type="text/javascript">
+		function show(){
+
+				var token = sessionStorage.getItem('token');
+				// Consola
+				console.log(token);
+				// Instanciar el objeto XMLHttpRequest
+				var songs = new XMLHttpRequest();
+				
+				// Petición HTTP con POST
+				songs.open('GET', 'http://h2744356.stratoserver.net/adrian/appmusicAdrian/public/index.php/songs/songs.json');
+				// Cabecera de la petición
+				songs.setRequestHeader('Authorization', token);
+				// Envío
+				songs.send();
+
+				// Preparar respuesta
+				songs.onreadystatechange = function(){
+					if (songs.readyState == 4) {
+					var response = JSON.parse(songs.responseText);
+					console.log(response);
+					response.forEach(function (a){
+						var node = document.createElement("LI");
+						var textnode = document.createTextNode(a['title']);
+						node.appendChild(textnode);
+						document.getElementById('listSong').appendChild(node);
+					});
+				}
+			}
+		}
+
+		function main()
+		{
+			window.location.href = "main.html";
+		}
+
+	</script>
+</head>
+<body>
+
+	<h1>Songs</h1>
+
+	<hr>
+
+	<button onclick='show()'>Mostrar canciones</button>
+	<button onclick='main()'>Volver al Main</button>
+
+	<ul id="listSong">
+		
+	</ul>
+
+	<div id='response'>
+			<p id='code'></p>
+			<p id='message'></p>
+			<p id='data'></p>
+	</div>
+
+</body>
+</html>
